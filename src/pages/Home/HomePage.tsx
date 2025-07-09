@@ -11,7 +11,6 @@ const Home = () => {
             <SearchArea />
             <RouteSwiper />
             <PartnerBusesSwiper />
-
         </div>
     );
 };

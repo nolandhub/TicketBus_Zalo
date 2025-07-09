@@ -1,34 +1,18 @@
 import { useState } from "react";
-import { Input, Button } from "zmp-ui";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Input, Button, Modal, Box, Avatar, Text } from "zmp-ui";
 import BackHeader from "../common/BackHeader";
 import CustomSelect from "@/components/common/Select";
-import DateTimePicker from "../common/DateTimePicker";
-
-const busPartners = [
-    { label: "Cúc Tùng", value: "1" },
-    { label: "Hải Vân", value: "2" },
-    { label: "Sao Việt", value: "3" },
-    { label: "Phong Phú", value: "4" },
-];
-
-const routes = [
-    { label: "Sài Gòn - Đà Lạt", value: "1" },
-    { label: "Hà Nội - Sapa", value: "2" },
-    { label: "Sài Gòn - Vũng Tàu", value: "3" },
-];
+import coverPhoto from "@/static/slideshow-7107-hinh.jpg"
+import { CheckCircle } from "lucide-react";
 
 const BookingForm = () => {
     const [formData, setFormData] = useState({
         fullName: "",
         phone: "",
-        busPartner: "",
-        routeName: "",
         passengerCount: 1,
-        dateTime: new Date(),
-        returnDate: null as Date | null,
     });
+
+    const [showModal, setShowModal] = useState(false);
 
     const handleChange = (field: string, value: any) => {
         setFormData({ ...formData, [field]: value });
@@ -36,7 +20,8 @@ const BookingForm = () => {
 
     const handleSubmit = () => {
         console.log("Booking Info:", formData);
-        // TODO: Gọi API hoặc lưu vào Firestore
+        // Giả sử gọi API ở đây
+        setShowModal(true); // Mở modal thông báo
     };
 
     const passengerOptions = Array.from({ length: 30 }, (_, i) => ({
@@ -46,11 +31,12 @@ const BookingForm = () => {
 
     return (
         <div className="space-y-5 min-h-screen bg-white">
-            <BackHeader title="Đặt vé xe" backTo="/" />
+            <BackHeader title="Đặt vé xe" backTo="/availableTrip" />
 
             <div className="bg-slate-100 font-bold p-4 rounded-2xl space-y-4">
                 <Input
                     label="Họ tên"
+                    type="text"
                     placeholder="Nhập họ tên"
                     value={formData.fullName}
                     onChange={(e) => handleChange("fullName", e.target.value)}
@@ -59,24 +45,11 @@ const BookingForm = () => {
 
                 <Input
                     label="Số điện thoại"
+                    type="number"
                     placeholder="SĐT của bạn"
                     value={formData.phone}
                     onChange={(e) => handleChange("phone", e.target.value)}
                     required
-                />
-
-                <CustomSelect
-                    label="Chọn nhà xe"
-                    options={busPartners}
-                    value={formData.busPartner}
-                    onChange={(val) => handleChange("busPartner", val)}
-                />
-
-                <CustomSelect
-                    label="Chọn tuyến"
-                    options={routes}
-                    value={formData.routeName}
-                    onChange={(val) => handleChange("routeName", val)}
                 />
 
                 <CustomSelect
@@ -87,22 +60,6 @@ const BookingForm = () => {
                         handleChange("passengerCount", parseInt(val || "1") || 1)
                     }
                 />
-
-                <DateTimePicker
-                    label="Ngày đi"
-                    selected={formData.dateTime}  // ✅ đúng tên prop
-                    onChange={(val) => handleChange("dateTime", val)}
-                    minDate={new Date()}
-                />
-
-                <DateTimePicker
-                    label="Ngày về (nếu có)"
-                    selected={formData.returnDate}
-                    onChange={(val) => handleChange("returnDate", val)}
-                    minDate={formData.dateTime}
-                    isClearable
-                    placeholder="Chọn ngày về"
-                />
             </div>
 
             <Button
@@ -112,7 +69,34 @@ const BookingForm = () => {
             >
                 Đặt Ngay
             </Button>
-        </div >
+
+
+            <Modal
+                visible={showModal}
+                actions={[
+                    {
+                        close: true,
+                        highLight: true,
+                        text: "Đóng",
+                        onClick: () => setShowModal(false),
+                    },
+                ]}
+                coverSrc={coverPhoto}
+            >
+                <Box alignItems="center" flex flexDirection="column" textAlign="center">
+                    <div className="flex flex-col items-center space-y-3 pt-2">
+
+                        <CheckCircle style={{ width: 120, height: 120 }} className="text-green-600" strokeWidth={2} />
+
+                        <Text.Title>Đặt vé thành công</Text.Title>
+
+                        <Text size="small" className="text-gray-600 text-center">
+                            Chúng tôi sẽ sớm liên hệ để xác nhận chỗ ngồi và điểm đón. Cảm ơn bạn!
+                        </Text>
+                    </div>
+                </Box>
+            </Modal>
+        </div>
     );
 };
 

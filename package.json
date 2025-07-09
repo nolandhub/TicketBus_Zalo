@@ -30,7 +30,8 @@
     "react-select": "^5.10.1",
     "swiper": "^11.2.10",
     "zmp-sdk": "latest",
-    "zmp-ui": "latest"
+    "zmp-ui": "latest",
+    "zustand": "^5.0.6"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",
