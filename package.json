@@ -17,6 +17,7 @@
   "scripts": {
     "login": "zmp login",
     "start": "zmp start",
+    "build": "zmp build",
     "deploy": "zmp deploy"
   },
   "dependencies": {
